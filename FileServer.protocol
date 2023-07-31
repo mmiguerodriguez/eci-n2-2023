@@ -1,0 +1,29 @@
+typestate FileServer {
+  Init = {
+    boolean start(): <true: Started, false: end>
+  }
+
+  Started = {
+    RequestType hasRequest(): <FILE_REQUEST: ReqAcknowledged, CLOSE: Closed, UNK: Started>,
+  }
+
+  Closed = {
+    void close(): end
+  }
+
+  ReqAcknowledged = {
+    boolean hasFile(): <true: FileFound, false: NoBytes>
+  }
+
+  FileFound = {
+    boolean eof(): <true: NoBytes, false: SendByte>
+  }
+
+  NoBytes = {
+    void sendZeroByte(): Started
+  }
+
+  SendByte = {
+    void sendByte(): FileFound
+  }
+}

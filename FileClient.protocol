@@ -1,0 +1,19 @@
+typestate FileClient {
+  Init = {
+    boolean start(): <true: Started, false: end>
+  }
+
+  Started = {
+    void request(): RequestSent,
+    void close(): end
+  }
+
+  RequestSent = {
+    void sendFileName(): Read
+  }
+
+  Read = {
+    ByteState readByte() : <ZERO: Started, NONZERO: Read>
+  }
+
+}
