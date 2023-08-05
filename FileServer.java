@@ -1,3 +1,5 @@
+package example;
+
 import java.net.*;
 import java.io.*;
 import jatyc.lib.Typestate;
@@ -8,6 +10,7 @@ public class FileServer {
   protected OutputStream out;
   protected BufferedReader in;
   protected String lastFilename;
+  protected String lastCommand;
 
   // We will hardcode the file bytes
   protected byte[] fileData = {1, 2, 3, 4, 5};
@@ -15,6 +18,7 @@ public class FileServer {
 
   public boolean start(Socket s) {
     try {
+      System.out.println("[FILESERVER] Starting File Server");
       socket = s;
       out = socket.getOutputStream();
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -25,28 +29,32 @@ public class FileServer {
     }
   }
 
-  public RequestType hasRequest() throws Exception {
+  public boolean hasRequest() throws Exception {
     String command = in.readLine();
-    if (command != null) {
-      if (command.equals("REQUEST") {
-        return RequestType.FILE_REQUEST;
-      } else if (command.equals("CLOSE"))){
-        return RequestType.CLOSE;
-      } else {
-        return RequestType.UNK;
-      }
-    } else {
-      return RequestType.UNK;
+    if(command != null) {
+      lastCommand = command;
+      return true;
     }
+    return false;
+  }
+
+  public boolean hasClosed() {
+    return lastCommand.equals("CLOSE");
   }
 
   public boolean hasFile() throws Exception {
-    String fileName = in.readline();
+    String fileName = in.readLine();
+
+    System.out.println("[FILESERVER] Checking if file exists: " + fileName);
+
     if(fileName != null) {
+
+      // Resets pointer to the beginning of the file.
       lastFilename = fileName;
       currentFileIdx = 0;
-      // Create a File object representing the file
-      File file = new File(fileName);
+
+      // Checks if the file exists in the CWD.
+      File file = new File("tp/src/main/resources/" + fileName);
       return file.exists();
     }
     return false;
@@ -56,23 +64,27 @@ public class FileServer {
     return currentFileIdx == fileData.length;
   }
 
-  public void sendZeroByte() {
+  public void sendZeroByte() throws IOException {
+    System.out.println("[FILESERVER] Sending Zero Byte");
+
     byte[] zeroByte = {0};
     out.write(zeroByte);
   }
 
-  public void sendByte() {
+  public void sendByte() throws IOException {
+    System.out.println("[FILESERVER] Sending one byte to client");
+
     // Write the current byte and increment the counter
     out.write(fileData, currentFileIdx, 1);
     currentFileIdx ++;
   }
 
-  // Lo llama el file server thread,.
-  // Solo se puede llamar si el cliente previamente me envio el request CLOSE
   public void close() throws Exception {
-    socket.close();
-    in.close();
+
+    System.out.println("[FILESERVER] Closing Server Socket");
     out.close();
+    in.close();
+    socket.close();
   }
 
   public static void main(String[] args) throws Exception {

@@ -1,3 +1,5 @@
+package example;
+
 import java.net.*;
 
 public class FileServerThread extends Thread {
@@ -11,16 +13,36 @@ public class FileServerThread extends Thread {
     try {
       FileServer server = new FileServer();
       if (server.start(socket)) {
-        System.out.println("File server started!");
+        System.out.println("[FILESERVER THREAD] File server started!");
 
+        while(true) {
 
+          if(server.hasRequest()) {
 
-        server.close();
+            if(server.hasClosed()) {
+              server.close();
+              return;
+            }
+
+            if(!server.hasFile()) {
+              server.sendZeroByte();
+              continue;
+            }
+
+            while(!server.eof()) {
+              server.sendByte();
+            }
+
+            server.sendZeroByte();
+          }
+
+        }
       } else {
-        System.out.println("Could not start server!");
+        System.out.println("[FILESERVER THREAD] Could not start server!");
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
+
 }

@@ -1,5 +1,11 @@
+package example;
+
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import jatyc.lib.Typestate;
 
 @Typestate("FileClient")
@@ -7,7 +13,7 @@ public class FileClient {
   private Socket socket;
   protected OutputStream out;
   protected BufferedReader in;
-  protected int lastByte;
+  protected List<Integer> bytes;
 
   public boolean start() {
     try {
@@ -22,22 +28,53 @@ public class FileClient {
   }
 
   public void request(String filename) throws Exception {
+
+    System.out.println("[FILECLIENT] Making a request with filename: " + filename);
+
+    bytes = new ArrayList<>();
+
     out.write("REQUEST\n".getBytes());
-    // TODO
+    String command = (filename + "\n");
+    out.write(command.getBytes());
   }
 
-  // TODO
+  public boolean readByte() throws IOException {
+    int byteRead = in.read();
+    System.out.println("[FILECLIENT] Read byte: " + byteRead);
+
+    if(byteRead == 0) return false;
+
+    // Add byte to bytes list
+    bytes.add(byteRead);
+    return true;
+  }
 
   public void close() throws Exception {
-    // TODO
+    System.out.println("[FILECLIENT] Closing client socket");
+
+    out.write("CLOSE\n".getBytes());
+
+    out.close();
+    in.close();
+    socket.close();
   }
 
   public static void main(String[] args) throws Exception {
     FileClient client = new FileClient();
     if (client.start()) {
-      System.out.println("File client started!");
-      // TODO
-      client.close();
+      System.out.println("[FILECLIENT] File client started!");
+
+      String filename = "test.txt";
+
+      client.request(filename);
+
+      while(true) {
+        if (!client.readByte()) {
+          client.close();
+          return;
+        }
+      }
+
     } else {
       System.out.println("Could not start client!");
     }

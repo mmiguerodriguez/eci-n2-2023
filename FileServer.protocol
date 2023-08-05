@@ -1,21 +1,25 @@
 typestate FileServer {
   Init = {
-    boolean start(): <true: Started, false: end>
+    boolean start(java.net.Socket): <true: Started, false: end>
   }
 
   Started = {
-    RequestType hasRequest(): <FILE_REQUEST: ReqAcknowledged, CLOSE: Closed, UNK: Started>,
+    boolean hasRequest(): <true: HasClosed, false: Started>
+  }
+
+  HasClosed = {
+    boolean hasClosed(): <true: Closed, false: Request>
   }
 
   Closed = {
     void close(): end
   }
 
-  ReqAcknowledged = {
-    boolean hasFile(): <true: FileFound, false: NoBytes>
+  Request = {
+    boolean hasFile(): <true: Read, false: NoBytes>
   }
 
-  FileFound = {
+  Read = {
     boolean eof(): <true: NoBytes, false: SendByte>
   }
 
@@ -24,6 +28,6 @@ typestate FileServer {
   }
 
   SendByte = {
-    void sendByte(): FileFound
+    void sendByte(): Read
   }
 }
