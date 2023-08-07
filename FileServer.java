@@ -14,7 +14,7 @@ public class FileServer {
 
   // We will hardcode the file bytes
   // File represents: abcde\nabcde
-  protected byte[] fileData = {97, 98, 99, 100, 101, 10, 97, 98, 99, 100, 101};
+  protected byte[] fileData = {97, 98, 99, 100, 101, 10, 97, 98, 99, 100, 101, 10};
   protected int currentFileIdx = 0;
 
   public boolean start(Socket s) {
@@ -54,8 +54,7 @@ public class FileServer {
       currentFileIdx = 0;
 
       // Checks if the file exists in the CWD.
-      File file = new File("tp/src/main/resources/" + fileName);
-      return file.exists();
+      return fileName.equals("test.txt");
     }
     return false;
   }
