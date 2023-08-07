@@ -1,0 +1,19 @@
+typestate FileClient2 {
+  Init = {
+    boolean start(): <true: Started, false: end>
+  }
+
+  Started = {
+    void request(String): Read
+  }
+
+  Read = {
+    boolean readByte() : <false: NoBytes, true: Read>,
+    boolean readLine() : <false: NoBytes, true: Read>
+  }
+
+  NoBytes = {
+    void close(): end,
+    void request(String): Read
+  }
+}

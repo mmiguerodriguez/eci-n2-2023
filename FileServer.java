@@ -13,7 +13,8 @@ public class FileServer {
   protected String lastCommand;
 
   // We will hardcode the file bytes
-  protected byte[] fileData = {1, 2, 3, 4, 5};
+  // File represents: abcde\nabcde
+  protected byte[] fileData = {97, 98, 99, 100, 101, 10, 97, 98, 99, 100, 101};
   protected int currentFileIdx = 0;
 
   public boolean start(Socket s) {
@@ -31,7 +32,7 @@ public class FileServer {
 
   public boolean hasRequest() throws Exception {
     String command = in.readLine();
-    if(command != null) {
+    if (command != null) {
       lastCommand = command;
       return true;
     }
@@ -48,7 +49,6 @@ public class FileServer {
     System.out.println("[FILESERVER] Checking if file exists: " + fileName);
 
     if(fileName != null) {
-
       // Resets pointer to the beginning of the file.
       lastFilename = fileName;
       currentFileIdx = 0;
@@ -80,7 +80,6 @@ public class FileServer {
   }
 
   public void close() throws Exception {
-
     System.out.println("[FILESERVER] Closing Server Socket");
     out.close();
     in.close();

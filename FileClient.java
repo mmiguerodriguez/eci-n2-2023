@@ -28,13 +28,11 @@ public class FileClient {
   }
 
   public void request(String filename) throws Exception {
-
     System.out.println("[FILECLIENT] Making a request with filename: " + filename);
-
     bytes = new ArrayList<>();
 
     out.write("REQUEST\n".getBytes());
-    String command = (filename + "\n");
+    String command = filename + "\n";
     out.write(command.getBytes());
   }
 
@@ -42,9 +40,8 @@ public class FileClient {
     int byteRead = in.read();
     System.out.println("[FILECLIENT] Read byte: " + byteRead);
 
-    if(byteRead == 0) return false;
+    if (byteRead == 0) return false;
 
-    // Add byte to bytes list
     bytes.add(byteRead);
     return true;
   }
@@ -53,7 +50,6 @@ public class FileClient {
     System.out.println("[FILECLIENT] Closing client socket");
 
     out.write("CLOSE\n".getBytes());
-
     out.close();
     in.close();
     socket.close();
@@ -64,17 +60,9 @@ public class FileClient {
     if (client.start()) {
       System.out.println("[FILECLIENT] File client started!");
 
-      String filename = "test.txt";
-
-      client.request(filename);
-
-      while(true) {
-        if (!client.readByte()) {
-          client.close();
-          return;
-        }
-      }
-
+      client.request("test.txt");
+      while (client.readByte()) { }
+      client.close();
     } else {
       System.out.println("Could not start client!");
     }
