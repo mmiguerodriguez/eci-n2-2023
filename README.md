@@ -1,4 +1,4 @@
-# Java Typestate Checker (JaTyC)
+# ECI 2023 - Java Typestate Checker (JaTyC)
 
 JaTyC is a powerful Java source code analysis tool designed to verify adherence to typestates in your Java programs.
 This repository contains a specialized application of JaTyC for verifying Java source code that follows a specific protocol involving the interaction between FileClient and FileServer classes. The protocol defines the states, methods, and transitions that can occur during the communication process.
