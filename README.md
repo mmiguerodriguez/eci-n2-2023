@@ -24,23 +24,6 @@ The protocol followed by the client (FileClient) and the server (FileServer) in 
 
 5. Graceful Termination: After the client completes its interaction, it will gracefully terminate. You can then terminate the processes by pressing CTRL+C.
 
-# Example Usage
-Here's an example of how you might use JaTyC for verifying Java source code with this specialized protocol:
-
-# Compile your Java code (replace with your actual compilation command)
-javac FileClient.java FileServer.java
-
-# Run JaTyC using the provided .sh file
-./run_jatyc.sh
-
-# Start the server
-java FileServer
-
-# In a separate terminal, start the client
-java FileClient
-
-# After the client finishes, terminate the processes with CTRL+C
-
 Acknowledgments
 This project utilizes the Java Typestate Checker (JaTyC) library. Special thanks for their contribution to the Java development community.
 
