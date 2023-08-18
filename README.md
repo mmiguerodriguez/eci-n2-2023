@@ -24,7 +24,7 @@ The protocol followed by the client (FileClient) and the server (FileServer) in 
 
 5. Graceful Termination: After the client completes its interaction, it will gracefully terminate. You can then terminate the processes by pressing CTRL+C.
 
-Acknowledgments
+# Acknowledgments
 This project utilizes the Java Typestate Checker (JaTyC) library. Special thanks for their contribution to the Java development community.
 
 License
