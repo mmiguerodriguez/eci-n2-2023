@@ -27,7 +27,4 @@ The protocol followed by the client (FileClient) and the server (FileServer) in 
 # Acknowledgments
 This project utilizes the Java Typestate Checker (JaTyC) library. Special thanks for their contribution to the Java development community.
 
-License
-This project is licensed under the MIT License.
-
 For more information about JaTyC and the specific protocol verification, please refer to the JaTyC GitHub repository. If you have any questions or encounter issues, feel free to create an issue on the repository. Your contributions and feedback are highly appreciated!
